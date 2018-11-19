@@ -289,121 +289,186 @@
         }
 
         var myChart = echarts.init(document.getElementById("container"));
-        myChart.showLoading();
-        myChart.hideLoading();
-        echarts.registerMap('china', chinaJson);
-        myChart.setOption(option = {
-            visualMap: {
-                min: 0,
-                max: 10,
-                text: ['High', 'Low'],
-                seriesIndex: [1],                   //必须设置此项,否则会覆盖标注点颜色
-                realtime: true,
-                calculable: true,
-                inRange: {
-                    color: ['lightskyblue', 'yellow', 'orangered']
-                },
-                textStyle: {
-                    color: 'lime'
-                }
-            },
-            geo: {
-                map: 'china',
-                roam: true,
-                label: {
-                    normal: {
-                        show: true,
-                        textStyle: {
-                            color: '#3ebee6'                        //省份字体颜色
-                        }
-                    }
-                },
-                itemStyle: {
-                    normal: {
-                        borderColor: 'rgba(0, 0, 0, 0.2)'
-                    },
-                    emphasis: {
-                        areaColor: null,
-                        shadowOffsetX: 0,
-                        shadowOffsetY: 0,
-                        shadowBlur: 20,
-                        borderWidth: 0,
-                        shadowColor: 'rgba(0, 0, 0, 0.5)'
-                    }
-                }
-            },
-            series: [
-                {
-                    roam: true,
-                    type: 'scatter',
-                    coordinateSystem: 'geo'
-                }
-            ]
-        });
-
-        var params = $.getUrlParam('params', self);
-        if(params){
-            params = new Base64().decode(params);
+        var param = $.getUrlParam('param', self);
+        if (param) {
+            param = new Base64().decode(param);
+            var catalog = $.getUrlParam('catalog',self);
             myChart.showLoading();
-            $.getJSON('json/geometryProvince/' + getProId(params) + '.js', function (geoJson) {
-                myChart.hideLoading();
-                echarts.registerMap(getProId(params), geoJson);
-                myChart.setOption(option = {
-                    visualMap: {
-                        min: 0,
-                        max: 10,
-                        text: ['High', 'Low'],
-                        seriesIndex: [1],                   //必须设置此项,否则会覆盖标注点颜色
-                        realtime: true,
-                        calculable: true,
-                        inRange: {
-                            color: ['lightskyblue', 'yellow', 'orangered']
+            if(catalog == 'province'){
+                $.getJSON('json/geometryProvince/' + getProId(param) + '.js', function (geoJson) {
+                    myChart.hideLoading();
+                    echarts.registerMap(getProId(param), geoJson);
+                    myChart.setOption(option = {
+                        visualMap: {
+                            min: 0,
+                            max: 10,
+                            text: ['High', 'Low'],
+                            seriesIndex: [1],                   //必须设置此项,否则会覆盖标注点颜色
+                            realtime: true,
+                            calculable: true,
+                            inRange: {
+                                color: ['lightskyblue', 'yellow', 'orangered']
+                            },
+                            textStyle: {
+                                color: 'lime'
+                            }
                         },
-                        textStyle: {
-                            color: 'lime'
-                        }
-                    },
-                    geo: {
-                        map: getProId(params),
-                        roam: true,
-                        label: {
-                            normal: {
-                                show: true,
-                                textStyle: {
-                                    color: '#3ebee6'                        //省份字体颜色
+                        geo: {
+                            map: getProId(param),
+                            roam: true,
+                            label: {
+                                normal: {
+                                    show: true,
+                                    textStyle: {
+                                        color: '#3ebee6'                        //省份字体颜色
+                                    }
+                                }
+                            },
+                            itemStyle: {
+                                normal: {
+                                    borderColor: 'rgba(0, 0, 0, 0.2)'
+                                },
+                                emphasis: {
+                                    areaColor: null,
+                                    shadowOffsetX: 0,
+                                    shadowOffsetY: 0,
+                                    shadowBlur: 20,
+                                    borderWidth: 0,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
                                 }
                             }
                         },
-                        itemStyle: {
-                            normal: {
-                                borderColor: 'rgba(0, 0, 0, 0.2)'
+                        series: [
+                            {
+                                roam: true,
+                                type: 'scatter',
+                                coordinateSystem: 'geo'
+                            }
+                        ]
+                    });
+                    myChart.on('click', function (params) {
+                        myChart.showLoading();
+                        window.location.href = `index2.html?param=${new Base64().encode(params.name)}&catalog=city&code=${getCityId(geoJson,params.name)}`;
+                    });
+                });
+            }
+            else if(catalog == 'city'){
+                myChart.showLoading();
+                var code = $.getUrlParam('code',self);
+                $.getJSON('json/geometryCouties/' + code + '.js', function (geoJson) {
+                    myChart.hideLoading();
+                    echarts.registerMap(code, geoJson);
+                    myChart.setOption(option = {
+                        visualMap: {
+                            min: 0,
+                            max: 10,
+                            text: ['High', 'Low'],
+                            seriesIndex: [1],                   //必须设置此项,否则会覆盖标注点颜色
+                            realtime: true,
+                            calculable: true,
+                            inRange: {
+                                color: ['lightskyblue', 'yellow', 'orangered']
                             },
-                            emphasis: {
-                                areaColor: null,
-                                shadowOffsetX: 0,
-                                shadowOffsetY: 0,
-                                shadowBlur: 20,
-                                borderWidth: 0,
-                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            textStyle: {
+                                color: 'lime'
+                            }
+                        },
+                        geo: {
+                            map: code,
+                            roam: true,
+                            label: {
+                                normal: {
+                                    show: true,
+                                    textStyle: {
+                                        color: '#3ebee6'
+                                    }
+                                }
+                            },
+                            itemStyle: {
+                                normal: {
+                                    borderColor: 'rgba(0, 0, 0, 0.2)'
+                                },
+                                emphasis: {
+                                    areaColor: null,
+                                    shadowOffsetX: 0,
+                                    shadowOffsetY: 0,
+                                    shadowBlur: 20,
+                                    borderWidth: 0,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
+                            }
+                        },
+                        series: [
+                            {
+                                roam: true,
+                                type: 'scatter',
+                                coordinateSystem: 'geo'
+                            }
+                        ]
+                    });
+                });
+                myChart.on('click', function (params) {
+                    alert('your code');
+                });
+            }
+        }
+        else{
+            myChart.showLoading();
+            myChart.hideLoading();
+            echarts.registerMap('china', chinaJson);
+            myChart.setOption(option = {
+                visualMap: {
+                    min: 0,
+                    max: 10,
+                    text: ['High', 'Low'],
+                    seriesIndex: [1],                   //必须设置此项,否则会覆盖标注点颜色
+                    realtime: true,
+                    calculable: true,
+                    inRange: {
+                        color: ['lightskyblue', 'yellow', 'orangered']
+                    },
+                    textStyle: {
+                        color: 'lime'
+                    }
+                },
+                geo: {
+                    map: 'china',
+                    roam: true,
+                    label: {
+                        normal: {
+                            show: true,
+                            textStyle: {
+                                color: '#3ebee6'                        //省份字体颜色
                             }
                         }
                     },
-                    series: [
-                        {
-                            roam: true,
-                            type: 'scatter',
-                            coordinateSystem: 'geo'
+                    itemStyle: {
+                        normal: {
+                            borderColor: 'rgba(0, 0, 0, 0.2)'
+                        },
+                        emphasis: {
+                            areaColor: null,
+                            shadowOffsetX: 0,
+                            shadowOffsetY: 0,
+                            shadowBlur: 20,
+                            borderWidth: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
                         }
-                    ]
-                });
+                    }
+                },
+                series: [
+                    {
+                        roam: true,
+                        type: 'scatter',
+                        coordinateSystem: 'geo'
+                    }
+                ]
+            });
+            myChart.on('click', function (params) {
+                myChart.showLoading();
+                window.location.href = `index2.html?param=${new Base64().encode(params.name)}&catalog=province`;
             });
         }
-
-        myChart.on('click', function (params) {
-            myChart.showLoading();
-            console.log(params.name);
-            window.location.href = `index.html?params=`+ new Base64().encode(params.name);
-        });
     </script>
 </body>
 
