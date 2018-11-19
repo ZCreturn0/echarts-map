@@ -1,1 +1,0 @@
-{"type":"FeatureCollection","features":[{"type":"Feature","id":"659009","properties":{"name":"昆玉市","cp":[79.287372,37.207994],"childNum":0},"geometry":{"type":"Polygon","coordinates":[],"encodeOffsets":[]}}],"UTF8Encoding":true}
