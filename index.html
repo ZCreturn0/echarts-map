@@ -175,8 +175,6 @@
         }
 
         var myChart = echarts.init(document.getElementById("container"));
-        myChart.showLoading();
-        myChart.hideLoading();
         echarts.registerMap('china', chinaJson);
         myChart.setOption(option = {
             visualMap: {
