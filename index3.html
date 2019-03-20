@@ -21,7 +21,9 @@
         <script type="text/javascript" src="json/china.js"></script>
         <script>
             var myChart = echarts.init(document.getElementById("container"));
+            // 获取对应省的文件,15.js对应内蒙
             $.getJSON('json/geometryProvince/15.js', function (geoJson) {
+                // 传入id:15
                 echarts.registerMap(15, geoJson);
                 myChart.setOption(option = {
                     visualMap: {
@@ -39,6 +41,7 @@
                         }
                     },
                     geo: {
+                        //id:15
                         map: 15,
                         roam: true,
                         label: {
