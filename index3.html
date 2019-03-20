@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title></title>
+        <style>
+            #container {
+                width: 100%;
+                height: 800px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="container"></div>
+        <script type="text/javascript" src="./js/jquery-1.8.2.min.js"></script>
+        <script type="text/javascript" src="./js/echarts_map.js"></script>
+        <script type="text/javascript" src="json/china.js"></script>
+        <script>
+            var mapList = [
+                {
+                    "id": "11",
+                    "name": "北京市"
+                },
+                {
+                    "id": "12",
+                    "name": "天津市"
+                },
+                {
+                    "id": "13",
+                    "name": "河北省"
+                },
+                {
+                    "id": "14",
+                    "name": "山西省"
+                },
+                {
+                    "id": "15",
+                    "name": "内蒙古自治区"
+                },
+                {
+                    "id": "21",
+                    "name": "辽宁省"
+                },
+                {
+                    "id": "22",
+                    "name": "吉林省"
+                },
+                {
+                    "id": "23",
+                    "name": "黑龙江省"
+                },
+                {
+                    "id": "31",
+                    "name": "上海市"
+                },
+                {
+                    "id": "32",
+                    "name": "江苏省"
+                },
+                {
+                    "id": "33",
+                    "name": "浙江省"
+                },
+                {
+                    "id": "34",
+                    "name": "安徽省"
+                },
+                {
+                    "id": "35",
+                    "name": "福建省"
+                },
+                {
+                    "id": "36",
+                    "name": "江西省"
+                },
+                {
+                    "id": "37",
+                    "name": "山东省"
+                },
+                {
+                    "id": "41",
+                    "name": "河南省"
+                },
+                {
+                    "id": "42",
+                    "name": "湖北省"
+                },
+                {
+                    "id": "43",
+                    "name": "湖南省"
+                },
+                {
+                    "id": "44",
+                    "name": "广东省"
+                },
+                {
+                    "id": "45",
+                    "name": "广西壮族自治区"
+                },
+                {
+                    "id": "46",
+                    "name": "海南省"
+                },
+                {
+                    "id": "50",
+                    "name": "重庆市"
+                },
+                {
+                    "id": "51",
+                    "name": "四川省"
+                },
+                {
+                    "id": "52",
+                    "name": "贵州省"
+                },
+                {
+                    "id": "53",
+                    "name": "云南省"
+                },
+                {
+                    "id": "54",
+                    "name": "西藏自治区"
+                },
+                {
+                    "id": "61",
+                    "name": "陕西省"
+                },
+                {
+                    "id": "62",
+                    "name": "甘肃省"
+                },
+                {
+                    "id": "63",
+                    "name": "青海省"
+                },
+                {
+                    "id": "64",
+                    "name": "宁夏回族自治区"
+                },
+                {
+                    "id": "65",
+                    "name": "新疆维吾尔自治区"
+                },
+                {
+                    "id": "71",
+                    "name": "台湾省"
+                },
+                {
+                    "id": "81",
+                    "name": "香港特别行政区"
+                },
+                {
+                    "id": "82",
+                    "name": "澳门特别行政区"
+                }
+            ];
+
+            $.getJSON('json/geometryProvince/15.js', function (geoJson) {
+                echarts.registerMap(15, geoJson);
+                myChart.setOption(option = {
+                    visualMap: {
+                        min: 0,
+                        max: 10,
+                        text: ['High', 'Low'],
+                        seriesIndex: [1],                   //必须设置此项,否则会覆盖标注点颜色
+                        realtime: true,
+                        calculable: true,
+                        inRange: {
+                            color: ['lightskyblue', 'yellow', 'orangered']
+                        },
+                        textStyle: {
+                            color: 'lime'
+                        }
+                    },
+                    geo: {
+                        map: getProId(param),
+                        roam: true,
+                        label: {
+                            normal: {
+                                show: true,
+                                textStyle: {
+                                    color: '#3ebee6'                        //省份字体颜色
+                                }
+                            }
+                        },
+                        itemStyle: {
+                            normal: {
+                                borderColor: 'rgba(0, 0, 0, 0.2)'
+                            },
+                            emphasis: {
+                                areaColor: null,
+                                shadowOffsetX: 0,
+                                shadowOffsetY: 0,
+                                shadowBlur: 20,
+                                borderWidth: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    },
+                    series: [
+                        {
+                            roam: true,
+                            type: 'scatter',
+                            coordinateSystem: 'geo'
+                        }
+                    ]
+                });
+            });
+
+        </script>
+    </body>
+
+</html>
